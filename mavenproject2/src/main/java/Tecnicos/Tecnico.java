@@ -4,12 +4,13 @@
  */
 package Tecnicos;
 
+import Server.Ticket;
 import Server.TicketInterface;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,7 +22,7 @@ public class Tecnico extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Tecnico.class.getName());
     private static TicketInterface ticket;
     private static DefaultTableModel model;
-    private static ArrayList<String[]> lista;
+    private static ArrayList<Ticket> lista;
 
     /**
      * Creates new form Tecnico
@@ -100,6 +101,11 @@ public class Tecnico extends javax.swing.JFrame {
 
         descripcionBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         descripcionBtn.setText("DESCRIPCIÓN");
+        descripcionBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descripcionBtnActionPerformed(evt);
+            }
+        });
 
         actualizarBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         actualizarBtn.setText("ACTUALIZAR");
@@ -183,6 +189,26 @@ public class Tecnico extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_actualizarBtnActionPerformed
 
+    private void descripcionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcionBtnActionPerformed
+        // TODO add your handling code here:
+        if (tabla.getSelectedRow() == -1) {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Selecciona una fila porfaplis",
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        } else {
+            Ticket t = lista.get(tabla.getSelectedRow());
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    t.getDescripcion(),
+                    "Descripción de Incidencia " + t.getId(),
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_descripcionBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -210,18 +236,16 @@ public class Tecnico extends javax.swing.JFrame {
             Registry reg = LocateRegistry.getRegistry("localhost", 1099);
             ticket = (TicketInterface) reg.lookup("TicketService");
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NotBoundException | RemoteException e) {
         }
     }
 
     private void add() throws RemoteException {
         model.setRowCount(0);
         lista = ticket.RecibirTicket();
-        for (String linea[] : lista) {
-            model.addRow(linea);
+        for (Ticket t : lista) {
+            model.addRow(t.toArray());
         }
-
     }
 
     private class hiloAdd extends Thread {

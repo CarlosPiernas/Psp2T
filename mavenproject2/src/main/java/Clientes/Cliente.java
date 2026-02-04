@@ -8,6 +8,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import Server.TicketInterface;
 import java.rmi.RemoteException;
+import Server.Ticket;
 
 /**
  *
@@ -16,8 +17,7 @@ import java.rmi.RemoteException;
 public class Cliente extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Cliente.class.getName());
-    private static String nombre, descripcion, prioridad, tipo;
-    private static  TicketInterface ticket;
+    private static TicketInterface ticket;
 
     /**
      * Creates new form Cliente
@@ -176,37 +176,30 @@ public class Cliente extends javax.swing.JFrame {
 
     private void crearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearBtnActionPerformed
         // TODO add your handling code here:
-        nombre = nombreField.getText();
-        descripcion = descripcionField.getText();
+        String nom = nombreField.getText();
+        String desc = descripcionField.getText();
+        String prio = prioridadField.getSelectedItem().toString();
+        int tpo = tipoField.getSelectedIndex();
 
-        switch (prioridadField.getSelectedIndex()) {
-            case 0 ->
-                prioridad = "Baja";
-            case 1 ->
-                prioridad = "Media";
-            case 2 ->
-                prioridad = "Alta";
-            case 3 ->
-                prioridad = "Ultra-Mega-Hiper-Urgente";
-        }
-        switch (tipoField.getSelectedIndex()) {
-            case 0 ->
-                tipo = "Hardware";
-            case 1 ->
-                tipo = "Software";
-        }
-        String datos[] = {nombre, prioridad, descripcion, tipo};
-        System.out.println(datos[0]);
-        System.out.println(datos[1]);
-        System.out.println(datos[2]);
-        System.out.println(datos[3]);
-        try {
-            ticket.EnviarTicket(datos);
-        } catch (RemoteException ex) {
-            System.getLogger(Cliente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        Ticket t = new Ticket(nom, desc, prio, tpo);
+
+        if (!nombreField.getText().isEmpty() && !descripcionField.getText().isEmpty()) {
+            try {
+                ticket.EnviarTicket(t);
+            } catch (RemoteException ex) {
+                System.getLogger(Cliente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Rellena los campos",
+                    "Tonto",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
         }
         nombreField.setText("");
         descripcionField.setText("");
+
+
     }//GEN-LAST:event_crearBtnActionPerformed
 
     private void limpiarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiarBtnActionPerformed
@@ -247,7 +240,7 @@ public class Cliente extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton crearBtn;
     private javax.swing.JTextField descripcionField;

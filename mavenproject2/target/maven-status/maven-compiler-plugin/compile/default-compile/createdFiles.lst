@@ -5,8 +5,10 @@ Tecnicos\Tecnico$2.class
 Clientes\Cliente.class
 Clientes\Cliente$3.class
 Tecnicos\Login.class
+Tecnicos\Tecnico$4.class
 Server\Server.class
 Tecnicos\Tecnico$1.class
+Server\Ticket.class
 Server\TicketInterfaceImpl.class
 Server\TicketInterface.class
 Tecnicos\Tecnico$hiloAdd.class

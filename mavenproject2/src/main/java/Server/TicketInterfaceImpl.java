@@ -14,31 +14,29 @@ import java.util.ArrayList;
  */
 public class TicketInterfaceImpl extends UnicastRemoteObject implements TicketInterface {
 
-    private static String tecnico;
-    private static int id = 1;
-    private static ArrayList<String[]> lista = new ArrayList<>();
+    private ArrayList<Ticket> listaTickets = new ArrayList<>();
+    private int id = 1;
 
-    ;
     public TicketInterfaceImpl() throws RemoteException {
-
     }
 
     @Override
-    public void EnviarTicket(String[] d) throws RemoteException {
-        System.out.println("Servidor recibió el ticket");
-        if (d[3].equalsIgnoreCase("hardware")) {
-            tecnico = "paco";
-        } else {
-            tecnico = "ramon";
-        }
-        String[] a = {String.valueOf(id), d[0], d[1], "Pendiente", tecnico};
-        lista.add(a);
+    public void EnviarTicket(Ticket t) throws RemoteException {
+        t.setId(id);
         id++;
+        if (t.getTipo() == 0) {
+            t.setTecnico("Paco");
+        } else {
+            t.setTecnico("Ramón");
+        }
+        listaTickets.add(t);
+        System.out.println("Ticket recibido");
     }
 
     @Override
-    public ArrayList<String[]> RecibirTicket() throws RemoteException {
-        return lista;
+    public ArrayList<Ticket> RecibirTicket() throws RemoteException {
+        return listaTickets;
+        //return new dice que es una copia
     }
 
 }
