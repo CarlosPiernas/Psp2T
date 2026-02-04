@@ -7,6 +7,7 @@ package Server;
 import java.lang.reflect.Array;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,6 +16,6 @@ import java.rmi.RemoteException;
 public interface TicketInterface extends Remote{
     
     void EnviarTicket(String[] d) throws RemoteException; 
-    String[] RecibirTicket() throws RemoteException;
+    ArrayList<String[]> RecibirTicket() throws RemoteException;
     
 }

@@ -6,37 +6,39 @@ package Server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 /**
  *
  * @author Alumno
  */
-public class TicketInterfaceImpl extends UnicastRemoteObject implements TicketInterface{
-    private static String nombre, descripcion, prioridad, tipo;
+public class TicketInterfaceImpl extends UnicastRemoteObject implements TicketInterface {
+
+    private static String tecnico;
+    private static int id = 1;
+    private static ArrayList<String[]> lista = new ArrayList<>();
+
+    ;
     public TicketInterfaceImpl() throws RemoteException {
-        
+
     }
 
     @Override
     public void EnviarTicket(String[] d) throws RemoteException {
         System.out.println("Servidor recibió el ticket");
-        nombre = d[0];
-        descripcion = d[1];
-        prioridad = d[2];
-        tipo = d[3];
-        System.out.println(d[0]);
-        System.out.println(d[1]);
-        System.out.println(d[2]);
-        System.out.println(d[3]);
+        if (d[3].equalsIgnoreCase("hardware")) {
+            tecnico = "paco";
+        } else {
+            tecnico = "ramon";
+        }
+        String[] a = {String.valueOf(id), d[0], d[1], "Pendiente", tecnico};
+        lista.add(a);
+        id++;
     }
 
     @Override
-    public String[] RecibirTicket() throws RemoteException {
-        String[] d = {nombre,descripcion,prioridad,tipo};
-        return d;
+    public ArrayList<String[]> RecibirTicket() throws RemoteException {
+        return lista;
     }
 
-    
-
 }
-

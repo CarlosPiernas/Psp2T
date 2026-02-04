@@ -205,6 +205,8 @@ public class Cliente extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             System.getLogger(Cliente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
+        nombreField.setText("");
+        descripcionField.setText("");
     }//GEN-LAST:event_crearBtnActionPerformed
 
     private void limpiarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiarBtnActionPerformed

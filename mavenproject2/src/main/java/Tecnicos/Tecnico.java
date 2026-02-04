@@ -8,6 +8,7 @@ import Server.TicketInterface;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,11 +19,9 @@ import javax.swing.table.DefaultTableModel;
 public class Tecnico extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Tecnico.class.getName());
-    private static String nombre, descripcion, prioridad, tipo;
-    private static String[] datosRaw;
     private static TicketInterface ticket;
     private static DefaultTableModel model;
-    private static int id = 1;
+    private static ArrayList<String[]> lista;
 
     /**
      * Creates new form Tecnico
@@ -44,30 +43,30 @@ public class Tecnico extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        label1 = new javax.swing.JLabel();
+        nombreLabel = new javax.swing.JLabel();
+        label2 = new javax.swing.JLabel();
+        rolLabel = new javax.swing.JLabel();
         Scroll = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        asignarBtn = new javax.swing.JButton();
+        resolverBtn = new javax.swing.JButton();
+        descripcionBtn = new javax.swing.JButton();
+        actualizarBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("TÉCNICO:");
+        label1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        label1.setText("TÉCNICO:");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("PACO");
+        nombreLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        nombreLabel.setText("PACO");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText("ROL:");
+        label2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        label2.setText("ROL:");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel4.setText("TÉCNICO DE HARDWARE");
+        rolLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        rolLabel.setText("TÉCNICO DE HARDWARE");
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -88,22 +87,27 @@ public class Tecnico extends javax.swing.JFrame {
         tabla.setShowGrid(true);
         Scroll.setViewportView(tabla);
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton1.setText("ASIGNAR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        asignarBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        asignarBtn.setText("ASIGNAR");
+        asignarBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                asignarBtnActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setText("RESOLVER");
+        resolverBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        resolverBtn.setText("RESOLVER");
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton3.setText("DESCRIPCIÓN");
+        descripcionBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        descripcionBtn.setText("DESCRIPCIÓN");
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton4.setText("EXPORTAR");
+        actualizarBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        actualizarBtn.setText("ACTUALIZAR");
+        actualizarBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,22 +117,22 @@ public class Tecnico extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(label1)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
+                        .addComponent(nombreLabel)
                         .addGap(40, 40, 40)
-                        .addComponent(jLabel3)
+                        .addComponent(label2)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel4))
+                        .addComponent(rolLabel))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(asignarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(134, 134, 134)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(resolverBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3)
+                            .addComponent(descripcionBtn)
                             .addGap(115, 115, 115)
-                            .addComponent(jButton4))
+                            .addComponent(actualizarBtn))
                         .addComponent(Scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 912, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
@@ -137,18 +141,18 @@ public class Tecnico extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(label1)
+                    .addComponent(nombreLabel)
+                    .addComponent(label2)
+                    .addComponent(rolLabel))
                 .addGap(18, 18, 18)
                 .addComponent(Scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(asignarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(resolverBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(descripcionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(actualizarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -166,9 +170,18 @@ public class Tecnico extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void asignarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asignarBtnActionPerformed
+
+    }//GEN-LAST:event_asignarBtnActionPerformed
+
+    private void actualizarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarBtnActionPerformed
+        try {
+            // TODO add your handling code here:
+            add();
+        } catch (RemoteException ex) {
+            System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }//GEN-LAST:event_actualizarBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,42 +215,41 @@ public class Tecnico extends javax.swing.JFrame {
         }
     }
 
-    private void add(String[] datosRaw) {
-        String[] datos = {String.valueOf(id), datosRaw[0], datosRaw[1], "estado", "paco"};
-        model.addRow(datos);
-        id++;
+    private void add() throws RemoteException {
+        model.setRowCount(0);
+        lista = ticket.RecibirTicket();
+        for (String linea[] : lista) {
+            model.addRow(linea);
+        }
+
     }
 
     private class hiloAdd extends Thread {
 
-        public hiloAdd() {
-        }
-
         @Override
         public void run() {
-            try {
-                datosRaw = ticket.RecibirTicket();
-                if (ticket.RecibirTicket() != datosRaw || datosRaw != null) {
-                    add(datosRaw);
+            while (true) {
+                try {
+                    add();
+                    Thread.sleep(4000);
+                } catch (RemoteException | InterruptedException ex) {
+                    System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
-                
-            } catch (RemoteException ex) {
-                System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane Scroll;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JButton actualizarBtn;
+    private javax.swing.JButton asignarBtn;
+    private javax.swing.JButton descripcionBtn;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel label1;
+    private javax.swing.JLabel label2;
+    private javax.swing.JLabel nombreLabel;
+    private javax.swing.JButton resolverBtn;
+    private javax.swing.JLabel rolLabel;
     private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

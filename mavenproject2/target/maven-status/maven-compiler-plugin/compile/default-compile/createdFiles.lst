@@ -1,12 +1,13 @@
 Clientes\Cliente$1.class
+Tecnicos\Tecnico$3.class
 Tecnicos\Tecnico.class
 Tecnicos\Tecnico$2.class
-Server\TicketInterfaceImpl.class
 Clientes\Cliente.class
 Clientes\Cliente$3.class
 Tecnicos\Login.class
 Server\Server.class
-Server\TicketInterface.class
 Tecnicos\Tecnico$1.class
+Server\TicketInterfaceImpl.class
+Server\TicketInterface.class
 Tecnicos\Tecnico$hiloAdd.class
 Clientes\Cliente$2.class
