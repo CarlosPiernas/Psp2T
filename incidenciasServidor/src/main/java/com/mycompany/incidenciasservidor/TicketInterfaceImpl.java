@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Server;
+package com.mycompany.incidenciasservidor;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -14,10 +14,9 @@ import java.util.ArrayList;
  */
 public class TicketInterfaceImpl extends UnicastRemoteObject implements TicketInterface {
 
-    private final ArrayList<Ticket> listaTickets = new ArrayList<>();
+    private ArrayList<Ticket> listaTickets = new ArrayList<>();
     private int id = 1;
 
-    //debo implementar concurrencia en los diferentes metodos en los que se accede al recurso compartido(lista)
     public TicketInterfaceImpl() throws RemoteException {
     }
 
