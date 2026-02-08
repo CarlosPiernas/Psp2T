@@ -14,14 +14,14 @@ import java.util.ArrayList;
  */
 public class TicketInterfaceImpl extends UnicastRemoteObject implements TicketInterface {
 
-    private ArrayList<Ticket> listaTickets = new ArrayList<>();
+    private final ArrayList<Ticket> listaTickets = new ArrayList<>();
     private int id = 1;
 
     public TicketInterfaceImpl() throws RemoteException {
     }
 
     @Override
-    public void EnviarTicket(Ticket t) throws RemoteException {
+    public synchronized void EnviarTicket(Ticket t) throws RemoteException {
         t.setId(id);
         id++;
         if (t.getTipo() == 0) {
@@ -34,9 +34,17 @@ public class TicketInterfaceImpl extends UnicastRemoteObject implements TicketIn
     }
 
     @Override
-    public ArrayList<Ticket> RecibirTicket() throws RemoteException {
-        return listaTickets;
-        //return new dice que es una copia
+    public synchronized ArrayList<Ticket> RecibirTicket() throws RemoteException {
+        return new ArrayList<>(listaTickets);
+    }
+
+    @Override
+    public synchronized void ActualizarTicket(Ticket t) throws RemoteException {
+        for (int i = 0; i < listaTickets.size(); i++) {
+            if (listaTickets.get(i).getId() == t.getId()) {
+                listaTickets.set(i, t);
+            }
+        }
     }
 
 }

@@ -8,8 +8,10 @@ Tecnicos\Login.class
 Tecnicos\Tecnico$4.class
 Server\Server.class
 Tecnicos\Tecnico$1.class
+Tecnicos\Tecnico$5.class
 Server\Ticket.class
 Server\TicketInterfaceImpl.class
 Server\TicketInterface.class
 Tecnicos\Tecnico$hiloAdd.class
 Clientes\Cliente$2.class
+Tecnicos\Tecnico$hiloResolver.class

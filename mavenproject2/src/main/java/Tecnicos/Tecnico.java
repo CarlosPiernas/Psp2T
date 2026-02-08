@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,6 +24,8 @@ public class Tecnico extends javax.swing.JFrame {
     private static TicketInterface ticket;
     private static DefaultTableModel model;
     private static ArrayList<Ticket> lista;
+    private static final Semaphore s = new Semaphore(2);
+    private int filaSeleccionada;
 
     /**
      * Creates new form Tecnico
@@ -98,6 +101,11 @@ public class Tecnico extends javax.swing.JFrame {
 
         resolverBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         resolverBtn.setText("RESOLVER");
+        resolverBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resolverBtnActionPerformed(evt);
+            }
+        });
 
         descripcionBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         descripcionBtn.setText("DESCRIPCIÓN");
@@ -209,6 +217,22 @@ public class Tecnico extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_descripcionBtnActionPerformed
 
+    private void resolverBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resolverBtnActionPerformed
+        // TODO add your handling code here:
+        filaSeleccionada = tabla.getSelectedRow();
+        hiloResolver hR = new hiloResolver();
+        Ticket t = lista.get(filaSeleccionada);
+        if (filaSeleccionada == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila porfaplis", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        if (!t.getTecnico().equalsIgnoreCase(nombreLabel.getText())) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Tecnico asociado incorrecto", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+
+        // Lanzamos el hilo para resolver el ticket sin bloquear la ventana
+        hR.start();
+    }//GEN-LAST:event_resolverBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -259,6 +283,29 @@ public class Tecnico extends javax.swing.JFrame {
                 } catch (RemoteException | InterruptedException ex) {
                     System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
+            }
+        }
+    }
+
+    private class hiloResolver extends Thread {
+
+        @Override
+        public void run() {
+            Ticket t;
+            try {
+                s.acquire();
+                t = lista.get(filaSeleccionada);
+                t.setEstado("EN PROCESO");
+                add();
+                ticket.ActualizarTicket(t);
+                Thread.sleep(5000);
+                t.setEstado("RESUELTO");
+                ticket.ActualizarTicket(t);
+                add();
+                s.release();
+            } catch (InterruptedException | RemoteException ex) {
+            } finally {
+                s.release();
             }
         }
     }

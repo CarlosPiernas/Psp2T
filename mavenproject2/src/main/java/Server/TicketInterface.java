@@ -16,5 +16,6 @@ public interface TicketInterface extends Remote{
     
     void EnviarTicket(Ticket t) throws RemoteException; 
     ArrayList<Ticket> RecibirTicket() throws RemoteException;
+    void ActualizarTicket(Ticket t) throws RemoteException;
     
 }
