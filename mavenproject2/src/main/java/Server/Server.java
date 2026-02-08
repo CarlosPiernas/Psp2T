@@ -20,6 +20,7 @@ public class Server {
      */
     public static void main(String[] args) throws RemoteException {
         Registry reg = LocateRegistry.createRegistry(1099);
+        System.setProperty("java.rmi.server.hostname","10.194.64.43");//Linea que permite identificar al servidor en la red
         reg.rebind("TicketService", (Remote) new TicketInterfaceImpl());
         System.out.println("Servidor RMI activo en 1099");
         
