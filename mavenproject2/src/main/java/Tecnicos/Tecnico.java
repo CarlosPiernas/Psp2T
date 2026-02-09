@@ -24,7 +24,7 @@ public class Tecnico extends javax.swing.JFrame {
     private static TicketInterface ticket;
     private static DefaultTableModel model;
     private static ArrayList<Ticket> lista;
-    private static final Semaphore s = new Semaphore(2);
+    private static final Semaphore s = new Semaphore(1);
     private int filaSeleccionada;
 
     /**
@@ -302,7 +302,6 @@ public class Tecnico extends javax.swing.JFrame {
                 t.setEstado("RESUELTO");
                 ticket.ActualizarTicket(t);
                 add();
-                s.release();
             } catch (InterruptedException | RemoteException ex) {
             } finally {
                 s.release();
