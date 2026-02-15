@@ -13,9 +13,13 @@ import java.util.ArrayList;
  * @author Alumno
  */
 public interface TicketInterface extends Remote{
-    
+    //método para que el cliente envíe una incidencia al servidor
     void EnviarTicket(Ticket t) throws RemoteException; 
+    //método para que el cliente envíe una incidencia al servidor
     ArrayList<Ticket> RecibirTicket() throws RemoteException;
+    //metodo para obtener la lista de incidencias ya resueltas
+    ArrayList<Ticket> RecibirHistorial() throws RemoteException;
+    //metodo para actualizar el estado de un ticket existente
     void ActualizarTicket(Ticket t) throws RemoteException;
     
 }

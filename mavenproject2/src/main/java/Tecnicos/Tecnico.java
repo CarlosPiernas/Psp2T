@@ -25,13 +25,19 @@ public class Tecnico extends javax.swing.JFrame {
     private static DefaultTableModel model;
     private static ArrayList<Ticket> lista;
     private static final Semaphore s = new Semaphore(1);
-    private int filaSeleccionada;
+    private int filaSeleccionada, resueltos, pendientes, enproceso;
+    private static Historial h;
 
     /**
      * Creates new form Tecnico
+     *
+     * @throws java.rmi.RemoteException
      */
-    public Tecnico() {
+    public Tecnico() throws RemoteException {
         initComponents();
+        h = new Historial();
+        nombreLabel.setText(Login.getSenior());
+        rolLabel.setText(Login.getRol());
         model = (DefaultTableModel) tabla.getModel();
         hiloAdd h = new hiloAdd();
         h.start();
@@ -53,10 +59,12 @@ public class Tecnico extends javax.swing.JFrame {
         rolLabel = new javax.swing.JLabel();
         Scroll = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
-        asignarBtn = new javax.swing.JButton();
+        exportarBtn = new javax.swing.JButton();
         resolverBtn = new javax.swing.JButton();
         descripcionBtn = new javax.swing.JButton();
         actualizarBtn = new javax.swing.JButton();
+        statsBtn = new javax.swing.JButton();
+        historialBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,11 +99,11 @@ public class Tecnico extends javax.swing.JFrame {
         tabla.setShowGrid(true);
         Scroll.setViewportView(tabla);
 
-        asignarBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        asignarBtn.setText("ASIGNAR");
-        asignarBtn.addActionListener(new java.awt.event.ActionListener() {
+        exportarBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        exportarBtn.setText("EXPORTAR");
+        exportarBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                asignarBtnActionPerformed(evt);
+                exportarBtnActionPerformed(evt);
             }
         });
 
@@ -123,6 +131,22 @@ public class Tecnico extends javax.swing.JFrame {
             }
         });
 
+        statsBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        statsBtn.setText("ESTADÍSTICAS");
+        statsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statsBtnActionPerformed(evt);
+            }
+        });
+
+        historialBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        historialBtn.setText("HISTORIAL");
+        historialBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                historialBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -131,24 +155,30 @@ public class Tecnico extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(statsBtn)
+                                .addGap(43, 43, 43)
+                                .addComponent(descripcionBtn)
+                                .addGap(57, 57, 57)
+                                .addComponent(resolverBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(historialBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(53, 53, 53)
+                                .addComponent(actualizarBtn))
+                            .addComponent(Scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 912, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(22, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(label1)
                         .addGap(18, 18, 18)
                         .addComponent(nombreLabel)
                         .addGap(40, 40, 40)
                         .addComponent(label2)
                         .addGap(18, 18, 18)
-                        .addComponent(rolLabel))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(asignarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(134, 134, 134)
-                            .addComponent(resolverBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(descripcionBtn)
-                            .addGap(115, 115, 115)
-                            .addComponent(actualizarBtn))
-                        .addComponent(Scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 912, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                        .addComponent(rolLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(exportarBtn)
+                        .addGap(31, 31, 31))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,15 +188,17 @@ public class Tecnico extends javax.swing.JFrame {
                     .addComponent(label1)
                     .addComponent(nombreLabel)
                     .addComponent(label2)
-                    .addComponent(rolLabel))
+                    .addComponent(rolLabel)
+                    .addComponent(exportarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(Scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(asignarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(resolverBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(descripcionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(actualizarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(actualizarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(statsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(historialBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -184,10 +216,27 @@ public class Tecnico extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void asignarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_asignarBtnActionPerformed
+    private void exportarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportarBtnActionPerformed
+        // Exporta la lista actual de tickets a un archivo de texto
+        try (java.io.PrintWriter escritor = new java.io.PrintWriter(new java.io.FileWriter("historial.txt", true))) {
+            //si la lista esta veacia
+            if (lista == null || lista.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "No hay tickets para exportar", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 
-    }//GEN-LAST:event_asignarBtnActionPerformed
+            } else {
+                //por cada ticket en la lista
+                for (Ticket t : lista) {
+                    String texto = "ID: " + t.getId() + " | Cliente: " + t.getCliente() + " | Prioridad: " + t.getPrioridad() + " | Estado: " + t.getEstado() + " | Tipo: " + t.getTipo();
+                    escritor.println(texto);
+                }
+                javax.swing.JOptionPane.showMessageDialog(this, "Historial de tickets guardado en historial.txt");
+            }
+        } catch (java.io.IOException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al exportar el archivo: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_exportarBtnActionPerformed
 
+    //boton para actualizar la lista manualmente
     private void actualizarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarBtnActionPerformed
         try {
             // TODO add your handling code here:
@@ -197,6 +246,7 @@ public class Tecnico extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_actualizarBtnActionPerformed
 
+    //boton para mostrar la descripcion
     private void descripcionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcionBtnActionPerformed
         // TODO add your handling code here:
         if (tabla.getSelectedRow() == -1) {
@@ -217,21 +267,40 @@ public class Tecnico extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_descripcionBtnActionPerformed
 
+    //boton para resoler un ticket
     private void resolverBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resolverBtnActionPerformed
-        // TODO add your handling code here:
         filaSeleccionada = tabla.getSelectedRow();
-        hiloResolver hR = new hiloResolver();
-        Ticket t = lista.get(filaSeleccionada);
+
+        // Verificamos primero si hay una fila seleccionada para evitar errores de índice
         if (filaSeleccionada == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila porfaplis", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
-        if (!t.getTecnico().equalsIgnoreCase(nombreLabel.getText())) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Tecnico asociado incorrecto", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return; // Salimos del método para no seguir ejecutando
         }
 
-        // Lanzamos el hilo para resolver el ticket sin bloquear la ventana
-        hR.start();
+        Ticket t = lista.get(filaSeleccionada);
+        String tecnicoLogueado = nombreLabel.getText();
+
+        //Si no es el técnico asignado y no es "Jose" entonces da error
+        if (!t.getTecnico().equalsIgnoreCase(tecnicoLogueado) && !tecnicoLogueado.equalsIgnoreCase("Jose")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Tecnico asociado incorrecto. Solo el asignado o Jose pueden resolver.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            //lanza el hilo
+            hiloResolver hR = new hiloResolver();
+            hR.start();
+        }
     }//GEN-LAST:event_resolverBtnActionPerformed
+
+    //boton para mostrar las estadisticas
+    private void statsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statsBtnActionPerformed
+        // TODO add your handling code here:
+        String stats = "Tickets resueltos: " + resueltos + "\n Tickets pendientes: " + pendientes + "\n Tickets en proceso: " + enproceso;
+        javax.swing.JOptionPane.showMessageDialog(this, stats, "Estadísticas", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_statsBtnActionPerformed
+
+    //boton para abrir el historial
+    private void historialBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialBtnActionPerformed
+        h.abrirHistorial();
+    }//GEN-LAST:event_historialBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,23 +324,55 @@ public class Tecnico extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Tecnico().setVisible(true));
-        try {
-            Registry reg = LocateRegistry.getRegistry("localhost", 1099);
-            ticket = (TicketInterface) reg.lookup("TicketService");
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new Login().setVisible(true);
+            } catch (RemoteException ex) {
+                System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
 
+        try {
+            // busca el registro y el objeto TicketService
+            Registry reg = LocateRegistry.getRegistry("localhost", 1099);
+            // registra el cliente en el servidor para el broadcast
+            ticket = (TicketInterface) reg.lookup("TicketService");
+            System.out.println("Conectado correctamente");
         } catch (NotBoundException | RemoteException e) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Error de conexion", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+
         }
     }
 
+    //metodo para actualizar la lista
     private void add() throws RemoteException {
         model.setRowCount(0);
         lista = ticket.RecibirTicket();
+        pendientes = 0;
+        enproceso = 0;
         for (Ticket t : lista) {
             model.addRow(t.toArray());
+            if (t.getEstado().equalsIgnoreCase("pendiente")) {
+                pendientes += 1;
+            } else if (t.getEstado().equalsIgnoreCase("en proceso")) {
+                enproceso += 1;
+            }
         }
     }
 
+    //metodo para abrir esta ventana
+    public void abrirTec() {
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new Tecnico().setVisible(true);
+            } catch (RemoteException ex) {
+                System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
+
+    }
+
+    //hilo encargado de refrescar la pagina
     private class hiloAdd extends Thread {
 
         @Override
@@ -279,7 +380,7 @@ public class Tecnico extends javax.swing.JFrame {
             while (true) {
                 try {
                     add();
-                    Thread.sleep(4000);
+                    Thread.sleep(5000);
                 } catch (RemoteException | InterruptedException ex) {
                     System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
@@ -287,6 +388,7 @@ public class Tecnico extends javax.swing.JFrame {
         }
     }
 
+    //hilo encargado de resolver los tickets
     private class hiloResolver extends Thread {
 
         @Override
@@ -298,10 +400,11 @@ public class Tecnico extends javax.swing.JFrame {
                 t.setEstado("EN PROCESO");
                 add();
                 ticket.ActualizarTicket(t);
-                Thread.sleep(5000);
+                Thread.sleep(10000);
                 t.setEstado("RESUELTO");
                 ticket.ActualizarTicket(t);
                 add();
+                resueltos += 1;
             } catch (InterruptedException | RemoteException ex) {
             } finally {
                 s.release();
@@ -312,14 +415,16 @@ public class Tecnico extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane Scroll;
     private javax.swing.JButton actualizarBtn;
-    private javax.swing.JButton asignarBtn;
     private javax.swing.JButton descripcionBtn;
+    private javax.swing.JButton exportarBtn;
+    private javax.swing.JButton historialBtn;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel label1;
     private javax.swing.JLabel label2;
     private javax.swing.JLabel nombreLabel;
     private javax.swing.JButton resolverBtn;
     private javax.swing.JLabel rolLabel;
+    private javax.swing.JButton statsBtn;
     private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

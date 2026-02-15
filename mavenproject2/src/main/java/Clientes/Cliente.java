@@ -174,21 +174,25 @@ public class Cliente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nombreFieldActionPerformed
 
+    //Boton que crea el ticket y lo envía
     private void crearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearBtnActionPerformed
-        // TODO add your handling code here:
         String nom = nombreField.getText();
         String desc = descripcionField.getText();
         String prio = prioridadField.getSelectedItem().toString();
         int tpo = tipoField.getSelectedIndex();
 
+        //nueva instancia del ticket
         Ticket t = new Ticket(nom, desc, prio, tpo);
 
+        //en caso de que los campos estén llenos
         if (!nombreField.getText().isEmpty() && !descripcionField.getText().isEmpty()) {
             try {
+                //envia el ticket
                 ticket.EnviarTicket(t);
             } catch (RemoteException ex) {
                 System.getLogger(Cliente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
+            //en caso de que no muestra un panel
         } else {
             javax.swing.JOptionPane.showMessageDialog(
                     this,
@@ -196,12 +200,14 @@ public class Cliente extends javax.swing.JFrame {
                     "Tonto",
                     javax.swing.JOptionPane.ERROR_MESSAGE);
         }
+        //limpia los campos
         nombreField.setText("");
         descripcionField.setText("");
-
-
+        prioridadField.setSelectedIndex(0);
+        tipoField.setSelectedIndex(0);
     }//GEN-LAST:event_crearBtnActionPerformed
 
+    //Boton para limpiar los campos
     private void limpiarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpiarBtnActionPerformed
         nombreField.setText("");
         descripcionField.setText("");
@@ -232,12 +238,16 @@ public class Cliente extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new Cliente().setVisible(true));
+        //intenta hacer la conexión
         try {
+            // busca el registro y el objeto TicketService
             Registry reg = LocateRegistry.getRegistry("localhost", 1099);
+            // registra el cliente en el servidor para el broadcast
             ticket = (TicketInterface) reg.lookup("TicketService");
-
+            System.out.println("Conectado correctamente");
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error de conexion");
         }
     }
 

@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @author Carlos
  */
 public class Ticket implements Serializable {
+
     // Es el numero de version utilizado, ayuda al servidor a corroborar que el ticket es el mismo que tiene guardado
     private static final long serialVersionUID = 1L;
 
@@ -22,6 +23,7 @@ public class Ticket implements Serializable {
     private String tecnico;
     private final int tipo;
 
+    // Constructor para inicializar los datos básicos de una incidencia
     public Ticket(String cliente, String descripcion, String prioridad, int tipo) {
         this.cliente = cliente;
         this.descripcion = descripcion;
@@ -29,7 +31,8 @@ public class Ticket implements Serializable {
         this.estado = "PENDIENTE";
         this.tipo = tipo;
     }
-    
+
+    //GETTERS Y SETTERS
     public int getId() {
         return id;
     }
@@ -65,10 +68,12 @@ public class Ticket implements Serializable {
     public void setTecnico(String tecnico) {
         this.tecnico = tecnico;
     }
+
     public void setId(int id) {
         this.id = id;
     }
     
+    // Convierte el objeto en un array para mostrarlo fácilmente en las tablas JTable
     public Object[] toArray() {
         return new Object[]{id, cliente, prioridad, estado, tecnico};
     }
