@@ -10,7 +10,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -110,6 +109,7 @@ public class Historial extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     //metodo para actualizar la lista
