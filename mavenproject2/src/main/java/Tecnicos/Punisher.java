@@ -44,9 +44,9 @@ public class Punisher extends javax.swing.JFrame {
 
         iniciarBtn.setBackground(new java.awt.Color(0, 0, 0));
         iniciarBtn.setFont(new java.awt.Font("Comic Sans MS", 1, 36)); // NOI18N
-        iniciarBtn.setForeground(new java.awt.Color(255, 255, 255));
+        iniciarBtn.setForeground(new java.awt.Color(255, 102, 0));
         iniciarBtn.setText("INICIAR");
-        iniciarBtn.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        iniciarBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 102, 0), new java.awt.Color(255, 102, 0)));
         iniciarBtn.setBorderPainted(false);
         iniciarBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
