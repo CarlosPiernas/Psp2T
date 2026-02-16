@@ -36,18 +36,6 @@ public class Tecnico extends javax.swing.JFrame {
     public Tecnico() throws RemoteException {
         initComponents();
         h = new Historial();
-
-        String usuarioActual = Login.getSenior();
-        nombreLabel.setText(usuarioActual);
-        rolLabel.setText(Login.getRol());
-
-        // Lógica para habilitar el botón de historial solo si es Jose
-        if (usuarioActual.equalsIgnoreCase("JOSE")) {
-            historialBtn.setEnabled(true);
-        } else {
-            historialBtn.setEnabled(false);
-        }
-
         model = (DefaultTableModel) tabla.getModel();
         hiloAdd h = new hiloAdd();
         h.setDaemon(true);
@@ -79,17 +67,25 @@ public class Tecnico extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        label1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+
+        label1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        label1.setForeground(new java.awt.Color(255, 102, 0));
         label1.setText("TÉCNICO:");
 
-        nombreLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        nombreLabel.setText("PACO");
+        nombreLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        nombreLabel.setForeground(new java.awt.Color(255, 102, 0));
+        nombreLabel.setText(Login.getSenior());
 
-        label2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        label2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        label2.setForeground(new java.awt.Color(255, 102, 0));
         label2.setText("ROL:");
 
-        rolLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        rolLabel.setText("TÉCNICO DE HARDWARE");
+        rolLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        rolLabel.setForeground(new java.awt.Color(255, 102, 0));
+        rolLabel.setText(Login.getRol());
+
+        Scroll.setBackground(new java.awt.Color(51, 51, 51));
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -110,48 +106,66 @@ public class Tecnico extends javax.swing.JFrame {
         tabla.setShowGrid(true);
         Scroll.setViewportView(tabla);
 
-        exportarBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        exportarBtn.setBackground(new java.awt.Color(0, 0, 0));
+        exportarBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        exportarBtn.setForeground(new java.awt.Color(255, 255, 255));
         exportarBtn.setText("EXPORTAR");
+        exportarBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 102, 0), new java.awt.Color(255, 102, 0)));
         exportarBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exportarBtnActionPerformed(evt);
             }
         });
 
-        resolverBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        resolverBtn.setBackground(new java.awt.Color(0, 0, 0));
+        resolverBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        resolverBtn.setForeground(new java.awt.Color(255, 255, 255));
         resolverBtn.setText("RESOLVER");
+        resolverBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 102, 0), new java.awt.Color(255, 102, 0)));
         resolverBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resolverBtnActionPerformed(evt);
             }
         });
 
-        descripcionBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        descripcionBtn.setBackground(new java.awt.Color(0, 0, 0));
+        descripcionBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        descripcionBtn.setForeground(new java.awt.Color(255, 255, 255));
         descripcionBtn.setText("DESCRIPCIÓN");
+        descripcionBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 102, 0), new java.awt.Color(255, 102, 0)));
         descripcionBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 descripcionBtnActionPerformed(evt);
             }
         });
 
-        actualizarBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        actualizarBtn.setBackground(new java.awt.Color(0, 0, 0));
+        actualizarBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        actualizarBtn.setForeground(new java.awt.Color(255, 255, 255));
         actualizarBtn.setText("ACTUALIZAR");
+        actualizarBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 102, 0), new java.awt.Color(255, 102, 0)));
         actualizarBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actualizarBtnActionPerformed(evt);
             }
         });
 
-        statsBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        statsBtn.setBackground(new java.awt.Color(0, 0, 0));
+        statsBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        statsBtn.setForeground(new java.awt.Color(255, 255, 255));
         statsBtn.setText("ESTADÍSTICAS");
+        statsBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(255, 102, 0), new java.awt.Color(255, 102, 0)));
         statsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 statsBtnActionPerformed(evt);
             }
         });
 
-        historialBtn.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        historialBtn.setBackground(new java.awt.Color(0, 0, 0));
+        historialBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        historialBtn.setForeground(new java.awt.Color(255, 255, 255));
         historialBtn.setText("HISTORIAL");
+        historialBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, new java.awt.Color(255, 102, 0), new java.awt.Color(255, 102, 0)));
         historialBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 historialBtnActionPerformed(evt);
@@ -164,32 +178,30 @@ public class Tecnico extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(statsBtn)
-                                .addGap(43, 43, 43)
-                                .addComponent(descripcionBtn)
-                                .addGap(57, 57, 57)
-                                .addComponent(resolverBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(historialBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(53, 53, 53)
-                                .addComponent(actualizarBtn))
-                            .addComponent(Scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 912, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(22, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(label1)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(nombreLabel)
-                        .addGap(40, 40, 40)
+                        .addGap(64, 64, 64)
                         .addComponent(label2)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(rolLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(exportarBtn)
-                        .addGap(31, 31, 31))))
+                        .addGap(357, 357, 357)
+                        .addComponent(exportarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(statsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(47, 47, 47)
+                            .addComponent(descripcionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(44, 44, 44)
+                            .addComponent(resolverBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(historialBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(42, 42, 42)
+                            .addComponent(actualizarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 912, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -377,8 +389,6 @@ public class Tecnico extends javax.swing.JFrame {
     public void abrirTec() {
         java.awt.EventQueue.invokeLater(() -> {
             try {
-                // Al crear la nueva instancia, el constructor ejecutará 
-                // la lógica de habilitar/deshabilitar el botón.
                 new Tecnico().setVisible(true);
             } catch (RemoteException ex) {
                 System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
