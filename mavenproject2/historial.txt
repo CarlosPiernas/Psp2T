@@ -1,5 +1,6 @@
-ID: 1 | Cliente: Hola | Prioridad: BAJA | Estado: PENDIENTE
-ID: 2 | Cliente: asdasdas | Prioridad: BAJA | Estado: PENDIENTE
-ID: 1 | Cliente: grsdfhdsfgdgfsdgf | Prioridad: BAJA | Estado: PENDIENTE | Tipo: 0
-ID: 2 | Cliente: dgdfsdfsgdfsg | Prioridad: BAJA | Estado: PENDIENTE | Tipo: 0
-ID: 3 | Cliente: fdfsgfdsdfgs | Prioridad: BAJA | Estado: EN PROCESO | Tipo: 1
+Tickets pendientes
+ID: 2 | Cliente: sfgsdfgsdfg | Prioridad: BAJA | Estado: PENDIENTE | Tipo: 0
+ID: 3 | Cliente: 4egyertfgb | Prioridad: BAJA | Estado: PENDIENTE | Tipo: 0
+ID: 4 | Cliente: wretwretwret | Prioridad: BAJA | Estado: PENDIENTE | Tipo: 0
+Tickets resueltos
+ID: 1 | Cliente: gmjhkgjhgjkhjj | Prioridad: MEDIA | Estado: RESUELTO | Tipo: 1

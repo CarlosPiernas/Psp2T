@@ -194,7 +194,7 @@ public class Cliente extends javax.swing.JFrame {
         //en caso de que los campos estén llenos
         if (!nombreField.getText().isEmpty() && !descripcionField.getText().isEmpty()) {
             try {
-                //envia el ticket
+                //envia el ticket mediante el metodo remoto
                 ticket.EnviarTicket(t);
                 javax.swing.JOptionPane.showMessageDialog(
                     this,

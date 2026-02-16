@@ -23,7 +23,7 @@ public class Tecnico extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Tecnico.class.getName());
     private static TicketInterface ticket;
     private static DefaultTableModel model;
-    private static ArrayList<Ticket> lista;
+    private static ArrayList<Ticket> lista, histo;
     private static final Semaphore s = new Semaphore(1);
     private int filaSeleccionada, resueltos, pendientes, enproceso;
     private static Historial h;
@@ -64,6 +64,7 @@ public class Tecnico extends javax.swing.JFrame {
         actualizarBtn = new javax.swing.JButton();
         statsBtn = new javax.swing.JButton();
         historialBtn = new javax.swing.JButton();
+        resolverProgress = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -187,14 +188,16 @@ public class Tecnico extends javax.swing.JFrame {
                         .addComponent(label2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(rolLabel)
-                        .addGap(357, 357, 357)
+                        .addGap(112, 112, 112)
+                        .addComponent(resolverProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(63, 63, 63)
                         .addComponent(exportarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(statsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(47, 47, 47)
                             .addComponent(descripcionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(44, 44, 44)
+                            .addGap(50, 50, 50)
                             .addComponent(resolverBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(historialBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -206,13 +209,18 @@ public class Tecnico extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(label1)
-                    .addComponent(nombreLabel)
-                    .addComponent(label2)
-                    .addComponent(rolLabel)
-                    .addComponent(exportarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(label1)
+                            .addComponent(nombreLabel)
+                            .addComponent(label2)
+                            .addComponent(rolLabel)
+                            .addComponent(exportarBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(resolverProgress, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(Scroll, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -242,14 +250,23 @@ public class Tecnico extends javax.swing.JFrame {
 
     private void exportarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportarBtnActionPerformed
         // Exporta la lista actual de tickets a un archivo de texto
-        try (java.io.PrintWriter escritor = new java.io.PrintWriter(new java.io.FileWriter("historial.txt", true))) {
+        String tipo;
+        try (java.io.PrintWriter escritor = new java.io.PrintWriter(new java.io.FileWriter("historial.txt"))) {
+            histo = ticket.RecibirHistorial();
             //si la lista esta veacia
             if (lista == null || lista.isEmpty()) {
                 javax.swing.JOptionPane.showMessageDialog(this, "No hay tickets para exportar", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
 
             } else {
+                escritor.println("Tickets pendientes");
                 //por cada ticket en la lista
                 for (Ticket t : lista) {
+                    if(t.getTipo() == 1){tipo = "Hardware";}else {tipo = "Software";}
+                    String texto = "ID: " + t.getId() + " | Cliente: " + t.getCliente() + " | Prioridad: " + t.getPrioridad() + " | Estado: " + t.getEstado() + " | Tipo: " + tipo;
+                    escritor.println(texto);
+                }
+                escritor.println("Tickets resueltos");
+                for (Ticket t : histo) {
                     String texto = "ID: " + t.getId() + " | Cliente: " + t.getCliente() + " | Prioridad: " + t.getPrioridad() + " | Estado: " + t.getEstado() + " | Tipo: " + t.getTipo();
                     escritor.println(texto);
                 }
@@ -273,6 +290,7 @@ public class Tecnico extends javax.swing.JFrame {
     //boton para mostrar la descripcion
     private void descripcionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcionBtnActionPerformed
         // TODO add your handling code here:
+        //en caso de que no se seleccione una tabla
         if (tabla.getSelectedRow() == -1) {
             javax.swing.JOptionPane.showMessageDialog(
                     this,
@@ -280,7 +298,9 @@ public class Tecnico extends javax.swing.JFrame {
                     "Error",
                     javax.swing.JOptionPane.ERROR_MESSAGE
             );
+            //si se selecciona una tabla
         } else {
+            //guarda en un nuevo ticket el recogido y muestra su descripcion en un joptionpane
             Ticket t = lista.get(tabla.getSelectedRow());
             javax.swing.JOptionPane.showMessageDialog(
                     this,
@@ -295,23 +315,22 @@ public class Tecnico extends javax.swing.JFrame {
     private void resolverBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resolverBtnActionPerformed
         filaSeleccionada = tabla.getSelectedRow();
 
-        // Verificamos primero si hay una fila seleccionada para evitar errores de índice
+        // Verificamos primero si hay una fila seleccionada y salimos en caso de que no se haya seleccionado ninguna
         if (filaSeleccionada == -1) {
             javax.swing.JOptionPane.showMessageDialog(this, "Selecciona una fila porfaplis", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            return; // Salimos del método para no seguir ejecutando
-        }
-
-        Ticket t = lista.get(filaSeleccionada);
-        String tecnicoLogueado = nombreLabel.getText();
-
-        //Si no es el técnico asignado y no es "Jose" entonces da error
-        if (!t.getTecnico().equalsIgnoreCase(tecnicoLogueado) && !tecnicoLogueado.equalsIgnoreCase("Jose")) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Tecnico asociado incorrecto. Solo el asignado o Jose pueden resolver.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
-            //lanza el hilo
-            hiloResolver hR = new hiloResolver();
-            hR.setDaemon(true);
-            hR.start();
+            //guarda el ticket y el nombre
+            Ticket t = lista.get(filaSeleccionada);
+
+            //Si no es el técnico asignado y no es "Jose" entonces da error
+            if (!t.getTecnico().equalsIgnoreCase(nombreLabel.getText()) && !nombreLabel.getText().equalsIgnoreCase("Jose")) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Tecnico asociado incorrecto. Solo el asignado o Jose pueden resolver.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            } else {
+                //lanza el hilo
+                hiloResolver hR = new hiloResolver();
+                hR.setDaemon(true);
+                hR.start();
+            }
         }
     }//GEN-LAST:event_resolverBtnActionPerformed
 
@@ -371,10 +390,13 @@ public class Tecnico extends javax.swing.JFrame {
 
     //metodo para actualizar la lista
     private void add() throws RemoteException {
+        //limpia la tabla
         model.setRowCount(0);
+        //recibe la lista de tickets desde el metodo remoto
         lista = ticket.RecibirTicket();
         pendientes = 0;
         enproceso = 0;
+        //recorre la lista y la muestra
         for (Ticket t : lista) {
             model.addRow(t.toArray());
             if (t.getEstado().equalsIgnoreCase("pendiente")) {
@@ -399,10 +421,13 @@ public class Tecnico extends javax.swing.JFrame {
     //hilo encargado de refrescar la pagina
     private class hiloAdd extends Thread {
 
+        //metodo run ejecutado en el .start
         @Override
         public void run() {
+            //bucle infinito
             while (true) {
                 try {
+                    //ejecuta el metodo add cada 5 segundos
                     add();
                     Thread.sleep(5000);
                 } catch (RemoteException | InterruptedException ex) {
@@ -415,22 +440,42 @@ public class Tecnico extends javax.swing.JFrame {
     //hilo encargado de resolver los tickets
     private class hiloResolver extends Thread {
 
+        //metodo run ejecutado en el .start
         @Override
         public void run() {
             Ticket t;
             try {
+                //coge el semaforo para que nadie mas acceda a la lista
                 s.acquire();
+                //guarda el ticket de la fila seleccionada y le cambia el estado
                 t = lista.get(filaSeleccionada);
                 t.setEstado("EN PROCESO");
-                add();
+                //utiliza el metodo remoto para actualizar el ticket y refresca la tabla
                 ticket.ActualizarTicket(t);
-                Thread.sleep(10000);
+                add();
+
+                resolverProgress.setMinimum(0);
+                resolverProgress.setMaximum(100);
+                resolverProgress.setValue(0);
+
+                //bucle que tarda 10 segundos en llenarse la barra de progreso
+                for (int i = 0; i <= 100; i++) {
+                    resolverProgress.setValue(i);
+                    Thread.sleep(100);
+                }
+                //cambia el estado a resuelto y refresca la tabla
                 t.setEstado("RESUELTO");
+                t.setTecnico(nombreLabel.getText());
                 ticket.ActualizarTicket(t);
                 add();
                 resueltos += 1;
+                javax.swing.JOptionPane.showMessageDialog(null, "Ticket " + t.getId() + " resuelto con éxito.");
+                resolverProgress.setValue(0);
+
             } catch (InterruptedException | RemoteException ex) {
+                System.err.println("Error en resolución: " + ex.getMessage());
             } finally {
+                //suelta el semaforo para que el hilo de refresco siga funcionando
                 s.release();
             }
         }
@@ -447,6 +492,7 @@ public class Tecnico extends javax.swing.JFrame {
     private javax.swing.JLabel label2;
     private javax.swing.JLabel nombreLabel;
     private javax.swing.JButton resolverBtn;
+    private javax.swing.JProgressBar resolverProgress;
     private javax.swing.JLabel rolLabel;
     private javax.swing.JButton statsBtn;
     private javax.swing.JTable tabla;
