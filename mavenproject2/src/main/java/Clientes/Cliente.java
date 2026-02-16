@@ -190,6 +190,11 @@ public class Cliente extends javax.swing.JFrame {
             try {
                 //envia el ticket
                 ticket.EnviarTicket(t);
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Ticket enviado correctamente",
+                    "Felicidades",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } catch (RemoteException ex) {
                 System.getLogger(Cliente.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }

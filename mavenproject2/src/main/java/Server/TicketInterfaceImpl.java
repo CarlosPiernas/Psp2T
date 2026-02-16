@@ -55,6 +55,7 @@ public class TicketInterfaceImpl extends UnicastRemoteObject implements TicketIn
                 }
             }
         }
+        System.out.println("Ticket enviado");
     }
 
     @Override

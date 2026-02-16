@@ -36,10 +36,21 @@ public class Tecnico extends javax.swing.JFrame {
     public Tecnico() throws RemoteException {
         initComponents();
         h = new Historial();
-        nombreLabel.setText(Login.getSenior());
+
+        String usuarioActual = Login.getSenior();
+        nombreLabel.setText(usuarioActual);
         rolLabel.setText(Login.getRol());
+
+        // Lógica para habilitar el botón de historial solo si es Jose
+        if (usuarioActual.equalsIgnoreCase("JOSE")) {
+            historialBtn.setEnabled(true);
+        } else {
+            historialBtn.setEnabled(false);
+        }
+
         model = (DefaultTableModel) tabla.getModel();
         hiloAdd h = new hiloAdd();
+        h.setDaemon(true);
         h.start();
     }
 
@@ -287,6 +298,7 @@ public class Tecnico extends javax.swing.JFrame {
         } else {
             //lanza el hilo
             hiloResolver hR = new hiloResolver();
+            hR.setDaemon(true);
             hR.start();
         }
     }//GEN-LAST:event_resolverBtnActionPerformed
@@ -365,12 +377,13 @@ public class Tecnico extends javax.swing.JFrame {
     public void abrirTec() {
         java.awt.EventQueue.invokeLater(() -> {
             try {
+                // Al crear la nueva instancia, el constructor ejecutará 
+                // la lógica de habilitar/deshabilitar el botón.
                 new Tecnico().setVisible(true);
             } catch (RemoteException ex) {
                 System.getLogger(Tecnico.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         });
-
     }
 
     //hilo encargado de refrescar la pagina
