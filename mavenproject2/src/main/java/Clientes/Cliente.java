@@ -72,12 +72,6 @@ public class Cliente extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 102, 0));
         jLabel5.setText("TIPO:");
 
-        nombreField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nombreFieldActionPerformed(evt);
-            }
-        });
-
         crearBtn.setBackground(new java.awt.Color(0, 0, 0));
         crearBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         crearBtn.setForeground(new java.awt.Color(255, 102, 0));
@@ -186,10 +180,6 @@ public class Cliente extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void nombreFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_nombreFieldActionPerformed
 
     //Boton que crea el ticket y lo envía
     private void crearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearBtnActionPerformed
